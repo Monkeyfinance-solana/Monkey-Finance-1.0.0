@@ -1,0 +1,22 @@
+[package]
+name = "pod_vault"
+version = "0.1.0"
+description = "Peapod-style wrap/unwrap vault: swap TKN <-> bTKN 1:1 minus a protocol fee."
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "pod_vault"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ip = []
+cpi = ["no-entrypoint"]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "1.1.2", features = ["init-if-needed"] }
+anchor-spl = "1.1.2"
+mpl-token-metadata = "5.1.1"
