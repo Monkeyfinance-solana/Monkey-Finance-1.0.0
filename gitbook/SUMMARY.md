@@ -1,6 +1,6 @@
-# Summary
+# Table of contents
 
-* [Overview](overview.md)
+* [Overview](README.md)
 * [How Wrapping Works](how-wrapping-works.md)
 * [Fees & Where They Go](fees.md)
 * [Staking & Rewards](staking.md)
