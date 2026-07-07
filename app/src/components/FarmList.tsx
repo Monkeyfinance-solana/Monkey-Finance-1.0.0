@@ -1,6 +1,6 @@
 import { VAULTS } from "../config";
 import { VaultCard } from "./VaultCard";
-import { useVaultData, fmtRaw } from "../hooks/useVaultData";
+import { useVaultData, fmtRaw, fmtCompact } from "../hooks/useVaultData";
 import { CLUSTER } from "../network";
 
 export function FarmList({ onOpenVault }: { onOpenVault: (key: string) => void }) {
@@ -41,7 +41,7 @@ export function FarmList({ onOpenVault }: { onOpenVault: (key: string) => void }
           <div className="stat">
             <span className="icon">💰</span>
             <div className="label">TVL</div>
-            <div className="value">{primary.cfg ? `${fmtRaw(primary.tvl, primary.decimals)} TKN` : "-"}</div>
+            <div className="value">{primary.cfg ? `${fmtCompact(primary.tvl, primary.decimals)} TKN` : "-"}</div>
           </div>
           <div className="stat">
             <span className="icon">🧾</span>

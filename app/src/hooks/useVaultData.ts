@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as anchor from "@anchor-lang/core";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey, Keypair, RpcResponseAndContext, SignatureResult } from "@solana/web3.js";
@@ -91,6 +91,19 @@ export function fmtRaw(n: anchor.BN | bigint | number, decimals: number): string
   return (Number(n.toString()) / divisor).toLocaleString(undefined, { maximumFractionDigits: 4 });
 }
 
+// Same as fmtRaw, but collapses anything >= 1000 down to a "97k"-style
+// compact form instead of printing the full number -- used for TVL, which
+// otherwise gets long/hard-to-scan fast once a vault has real volume.
+// Smaller amounts (most fee/reward figures) still print exactly via fmtRaw.
+export function fmtCompact(n: anchor.BN | bigint | number, decimals: number): string {
+  const divisor = 10 ** decimals;
+  const value = Number(n.toString()) / divisor;
+  if (Math.abs(value) >= 1000) {
+    return `${(value / 1000).toLocaleString(undefined, { maximumFractionDigits: 1 })}k`;
+  }
+  return value.toLocaleString(undefined, { maximumFractionDigits: 4 });
+}
+
 // One hook, used by both the compact vault cards on the Farm page (which
 // only read cfg/tvl/apy) and the full vault detail page (which also needs
 // the connected user's position + the wrap/unwrap/stake/unstake/claim
@@ -128,7 +141,11 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
   const [loadError, setLoadError] = useState<string | null>(null);
   const [cfg, setCfg] = useState<any>(null);
   const [tvl, setTvl] = useState<bigint>(0n);
+  // LP-staker APY estimate (from accRewardPerShare).
   const [apy, setApy] = useState<string | null>(null);
+  // bTKN-staker APY estimate (from accBtknRewardPerShare) -- its own separate
+  // reward pool, so its own separate estimate rather than reusing `apy`.
+  const [btknApy, setBtknApy] = useState<string | null>(null);
 
   const [userTkn, setUserTkn] = useState<bigint>(0n);
   const [userBtkn, setUserBtkn] = useState<bigint>(0n);
@@ -166,6 +183,21 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
   // what lets the UI estimate "removing X LP returns ~Y bTKN + ~Z SOL"
   // (your share of the pool = your LP amount / total LP supply).
   const [lpSupply, setLpSupply] = useState<bigint>(0n);
+
+  // Refs mirroring poolReserves/lpSupply so refreshDashboard (below) can
+  // read their current values without depending on them directly -- LP APY
+  // needs the latest reserves/supply to compute correctly, but the
+  // dashboard (including the APY estimate) should still only actually
+  // refresh on its own 5-minute cadence, not every 30 seconds whenever the
+  // separate pool-reserves poll ticks.
+  const poolReservesRef = useRef(poolReserves);
+  const lpSupplyRef = useRef(lpSupply);
+  useEffect(() => {
+    poolReservesRef.current = poolReserves;
+  }, [poolReserves]);
+  useEffect(() => {
+    lpSupplyRef.current = lpSupply;
+  }, [lpSupply]);
 
   useEffect(() => {
     if (!msg) return;
@@ -209,15 +241,33 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
     };
   }, [tknMint, program]);
 
-  function updateApyEstimate(vaultConfigKey: string, accRewardPerShare: anchor.BN) {
-    const storageKey = `pod_vault_apy_snapshot_${vaultConfigKey}`;
+  // Shared by both LP-staker and bTKN-staker APY estimates below -- each
+  // pool has its own independent accumulator (accRewardPerShare vs.
+  // accBtknRewardPerShare), so each needs its own localStorage snapshot key
+  // and its own annualized-from-delta-since-first-snapshot calculation.
+  // Note this compares against the very first snapshot ever taken (not a
+  // rolling window), so the estimate gets more accurate the longer the tab
+  // has been open, rather than resetting every refresh.
+  //
+  // accRewardPerShare/SCALE is "raw TKN reward per raw staked-unit" -- for
+  // bTKN that's already a yield fraction outright, since 1 raw bTKN is
+  // worth exactly 1 raw TKN (same mint decimals, always 1:1 redeemable). An
+  // LP token is NOT 1:1 with TKN though: 1 LP unit is redeemable for its
+  // proportional share of the pool's bTKN + SOL reserves, so the same
+  // reward-per-share number needs to be divided by what 1 LP unit is
+  // actually worth (in TKN-equivalent terms) before it's a real yield
+  // fraction -- otherwise the LP APY comes out wildly wrong (treating a
+  // reward denominated in TKN as if 1 LP token = 1 TKN of value, when a
+  // deep pool might make 1 LP token worth many TKN, or a shallow one
+  // barely a fraction of one). `valuePerShare` defaults to 1 for bTKN's
+  // case; callers pass the LP's real redeemable value for the LP case.
+  function computeApyEstimate(storageKey: string, accRewardPerShare: anchor.BN, valuePerShare: number = 1): string {
     const now = Date.now();
     const stored = localStorage.getItem(storageKey);
 
     if (!stored) {
       localStorage.setItem(storageKey, JSON.stringify({ t: now, acc: accRewardPerShare.toString() }));
-      setApy("gathering data...");
-      return;
+      return "gathering data...";
     }
 
     const { t: prevT, acc: prevAccStr } = JSON.parse(stored);
@@ -226,13 +276,13 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
     const delta = accRewardPerShare.sub(prevAcc);
 
     if (elapsedSeconds < 60 || delta.isZero()) {
-      setApy(elapsedSeconds < 60 ? "gathering data..." : "0%");
-      return;
+      return elapsedSeconds < 60 ? "gathering data..." : "0%";
     }
 
-    const rewardPerLpToken = Number(delta.toString()) / Number(SCALE.toString());
-    const annualized = rewardPerLpToken * (SECONDS_PER_YEAR / elapsedSeconds) * 100;
-    setApy(`${annualized.toFixed(2)}%`);
+    const rewardPerShare = Number(delta.toString()) / Number(SCALE.toString());
+    const rewardFraction = valuePerShare > 0 ? rewardPerShare / valuePerShare : 0;
+    const annualized = rewardFraction * (SECONDS_PER_YEAR / elapsedSeconds) * 100;
+    return `${annualized.toFixed(2)}%`;
   }
 
   const refreshDashboard = useCallback(async () => {
@@ -242,7 +292,30 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
       setCfg(cfgData);
       const vaultBal = await connection.getTokenAccountBalance(pdas.vaultTokenAccount).catch(() => null);
       setTvl(vaultBal ? BigInt(vaultBal.value.amount) : 0n);
-      updateApyEstimate(pdas.vaultConfig.toBase58(), cfgData.accRewardPerShare);
+      const vaultConfigKey = pdas.vaultConfig.toBase58();
+
+      // bTKN's reward-per-share is already a yield fraction (1 bTKN = 1 TKN
+      // of value), so no adjustment needed.
+      setBtknApy(computeApyEstimate(`pod_vault_btkn_apy_snapshot_${vaultConfigKey}`, cfgData.accBtknRewardPerShare));
+
+      // LP's value per unit = 2x its bTKN-per-LP ratio (the pool's SOL side
+      // is worth roughly the same as its bTKN side, so the bTKN half of the
+      // reserves is about half of what 1 LP unit is really worth). Needs a
+      // live pool with known reserves + supply to compute at all -- without
+      // that, there's nothing sane to divide by, so the estimate just stays
+      // pending rather than showing a nonsense number.
+      const currentPoolReserves = poolReservesRef.current;
+      const currentLpSupply = lpSupplyRef.current;
+      const lpValuePerShare =
+        currentPoolReserves && currentLpSupply > 0n
+          ? (2 * Number(currentPoolReserves.btkn)) / Number(currentLpSupply)
+          : null;
+      setApy(
+        lpValuePerShare && lpValuePerShare > 0
+          ? computeApyEstimate(`pod_vault_apy_snapshot_${vaultConfigKey}`, cfgData.accRewardPerShare, lpValuePerShare)
+          : null
+      );
+
       setLoadError(null);
     } catch (e: any) {
       setLoadError(e.message ?? String(e));
@@ -758,6 +831,7 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
     cfg,
     tvl,
     apy,
+    btknApy,
     hasLpMint,
     hasPool,
     poolReserves,

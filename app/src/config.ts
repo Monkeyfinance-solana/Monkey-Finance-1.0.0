@@ -30,12 +30,23 @@ export const VAULTS: VaultDef[] = [
     // (see scripts/print_meteora_clone_cmd.ts), then a pool created via
     // scripts/create_meteora_pool.ts or the app's Create Pool form. lpMint
     // still needs set_lp_mint.ts before LP staking works.
-    tknMint: "5MpU39kmgdq3h6yT6vprKK71ynAUowDct3CpTJPfFmHG",
+    tknMint: "7TzvGfWcie62nj3e476AkQEo823HTVeYxVSvxiyU47Vv",
     status: "live",
-    poolId: "FhAZR48YCjV9SPsU7hPYuohfeZC7DF2jDrFLv8DxqnFw",
+    // Pool created via the app's Create Pool form.
+    poolId: "BF2cW17csLUYXWouHHJKLENK9t8GBfu15LM5Y5H33xia",
+    // lpMint (Meteora, register via set_lp_mint.ts): 3gYmo8p8au3BHm5gMEBinvXWukmMqTfoKHhJqmnDa68v
+
+    // --- previous local-test vault, before this one ---
+    // tknMint: "AthiDpYGG1rHmK8tWcsX8k7zkqz3d4rcHFtoERPN6eKs",
+    // poolId (Meteora): "CupqrZU9c2gpJF73o92T3SoyhA1SY2no145zZZSYYm1D"
+    // lpMint (Meteora, registered via set_lp_mint.ts): 3ncW3vQBtHDZzQyuSKDPmexQeCAv4aBWnUmvVR2MJCUF
+
+    // --- previous local-test vaults, before an earlier validator restart ---
+    // tknMint: "5MpU39kmgdq3h6yT6vprKK71ynAUowDct3CpTJPfFmHG",
+    // poolId (Meteora): "FhAZR48YCjV9SPsU7hPYuohfeZC7DF2jDrFLv8DxqnFw"
     // lpMint (Meteora, register via set_lp_mint.ts): 3EquqoDL3rjD9JeXhHyAJe4c2qDXKq1KySN9bEK62p4z
 
-    // --- previous local-test vaults, before validator resets required
+    // --- older local-test vaults, before validator resets required
     // for the Meteora AMM+Vault+Metaplex clone, and then for the
     // pending_authority/3%-fee-cap account-layout change ---
     // tknMint: "A85z2d2VLVSSqndA91nVdhmrqHVjGu5sZGdQh7ij3Dbt",

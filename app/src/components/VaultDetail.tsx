@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useVaultData, fmtRaw } from "../hooks/useVaultData";
+import { useVaultData, fmtRaw, fmtCompact } from "../hooks/useVaultData";
 import { TokenTag } from "./TokenTag";
 import { InfoTooltip } from "./InfoTooltip";
 import type { VaultDef } from "../config";
@@ -171,7 +171,7 @@ export function VaultDetail({ vault, onBack }: { vault: VaultDef; onBack: () => 
             <div className="stat">
               <span className="icon">💰</span>
               <div className="label">TVL</div>
-              <div className="value">{fmtRaw(d.tvl, d.decimals)} TKN</div>
+              <div className="value">{fmtCompact(d.tvl, d.decimals)} TKN</div>
             </div>
             <div className="stat">
               <span className="icon">🔥</span>
@@ -195,8 +195,13 @@ export function VaultDetail({ vault, onBack }: { vault: VaultDef; onBack: () => 
             </div>
             <div className="stat">
               <span className="icon">📈</span>
-              <div className="label">Staker APY (est.)</div>
+              <div className="label">LP staker APY (est.)</div>
               <div className="value accent">{d.apy ?? "-"}</div>
+            </div>
+            <div className="stat">
+              <span className="icon">🍌</span>
+              <div className="label">bTKN staker APY (est.)</div>
+              <div className="value accent">{d.btknApy ?? "-"}</div>
             </div>
           </div>
           <div className="fee-line">
@@ -207,17 +212,19 @@ export function VaultDetail({ vault, onBack }: { vault: VaultDef; onBack: () => 
               <b>{d.cfg.unwrapFeeBps / 100}%</b> unwrap fee
             </span>
             <span>
-              <b>{d.cfg.burnBps / 100}%</b> of each fee burned
+              <b>{d.cfg.burnBps / 100}%</b> burned
             </span>
             {d.cfg.protocolBps > 0 && (
               <span>
-                <b>{d.cfg.protocolBps / 100}%</b> of each fee to protocol revenue{" "}
+                <b>{d.cfg.protocolBps / 100}%</b> protocol revenue{" "}
                 <InfoTooltip text="Sent directly to the vault's protocol wallet on every wrap/unwrap." />
               </span>
             )}
             <span>
-              <b>{d.cfg.btknShareBps / 100}%</b> of each fee to bTKN stakers (vs. LP stakers){" "}
-              <InfoTooltip text="Every fee splits into up to four flat shares: burn, protocol revenue, bTKN stakers, and LP stakers (whatever's left). This is the bTKN-staker share." />
+              <b>{d.cfg.btknShareBps / 100}%</b> bTKN stakers
+            </span>
+            <span>
+              <b>{(10000 - d.cfg.burnBps - d.cfg.protocolBps - d.cfg.btknShareBps) / 100}%</b> LP stakers
             </span>
           </div>
         </div>

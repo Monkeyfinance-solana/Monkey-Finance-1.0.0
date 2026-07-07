@@ -1,4 +1,4 @@
-import { useVaultData, fmtRaw } from "../hooks/useVaultData";
+import { useVaultData, fmtCompact } from "../hooks/useVaultData";
 import type { VaultDef } from "../config";
 
 export function VaultCard({ vault, onOpen }: { vault: VaultDef; onOpen: () => void }) {
@@ -24,6 +24,10 @@ export function VaultCard({ vault, onOpen }: { vault: VaultDef; onOpen: () => vo
           </div>
           <div>
             <div className="label">LP APY</div>
+            <div className="value muted">-</div>
+          </div>
+          <div>
+            <div className="label">bTKN APY</div>
             <div className="value muted">-</div>
           </div>
         </div>
@@ -55,11 +59,15 @@ export function VaultCard({ vault, onOpen }: { vault: VaultDef; onOpen: () => vo
       <div className="vault-card-stats">
         <div>
           <div className="label">TVL</div>
-          <div className="value">{data.cfg ? `${fmtRaw(data.tvl, data.decimals)} TKN` : "-"}</div>
+          <div className="value">{data.cfg ? `${fmtCompact(data.tvl, data.decimals)} TKN` : "-"}</div>
         </div>
         <div>
           <div className="label">LP APY (est.)</div>
           <div className="value accent">{data.apy ?? "-"}</div>
+        </div>
+        <div>
+          <div className="label">bTKN APY (est.)</div>
+          <div className="value accent">{data.btknApy ?? "-"}</div>
         </div>
       </div>
       <button onClick={onOpen}>Open position</button>
