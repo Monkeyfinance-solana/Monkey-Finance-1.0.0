@@ -1,6 +1,8 @@
 # Overview
 
-Monkey Finance is a permissionless wrap vault protocol for Solana tokens. Anyone can wrap an existing token (TKN, e.g. a pump.fun launch) into a "pod" that mints a synthetic, vault-backed derivative called bTKN. There are two independent ways to earn a share of every fee the vault collects: stake bTKN directly (works the moment you've wrapped, no pool required), or, once a bTKN/SOL liquidity pool exists, stake that pool's LP token instead. You can do either, both, or neither.
+Monkey Finance is a wrap vault protocol on Solana. For now, wrapping is scoped to Monkey Finance's own token (MONKEY) — not an open, permissionless "wrap anything" protocol yet — though support for other tokens is on the roadmap. Wrapping deposits TKN and mints a synthetic, vault-backed derivative called a **banana** (bTKN), 1:1 against what's deposited, minus fees. There's no lock-up: you can unwrap back to TKN whenever you like.
+
+There are two independent ways to earn a share of every fee the vault collects: stake bTKN directly (works the moment you've wrapped, no pool required), or stake the bTKN/SOL liquidity pool's LP token instead — that pool already exists by the time you land on the app, so this isn't a "coming later" option. You can do either, both, or neither.
 
 ### Why it works this way
 

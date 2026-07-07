@@ -2,8 +2,8 @@
 
 | Term | Meaning |
 |---|---|
-| TKN | The underlying token a vault wraps — e.g. a pump.fun launch. |
-| bTKN | The pod's synthetic derivative, minted 1:1 against TKN held in the vault, minus fees. |
+| TKN | The underlying token a vault wraps — currently MONKEY itself, with other tokens planned for the future. |
+| bTKN / Banana | The vault's synthetic derivative, minted 1:1 against TKN held in the vault, minus fees. No lock-up — unwrap back to TKN any time. |
 | LP token | The Meteora liquidity-pool token for the bTKN/SOL pair — what you actually stake. |
 | Reward pot | The vault's TKN balance set aside from fees, split between the bTKN-staker pool and the LP-staker pool, paid out over time. |
 | Burn split | The % of each fee permanently destroyed rather than routed anywhere else. |
