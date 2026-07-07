@@ -376,7 +376,12 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
     try {
       // Read-only -- AmmImpl.create() does a fresh fetch + vault-adjusted
       // reserve calculation every call, so no separate updateState() needed.
-      const pool = await AmmImpl.create(connection, new PublicKey(poolId));
+      // Cast needed: the Meteora SDK bundles its own separately-versioned
+      // copy of @solana/web3.js, so its `Connection` type is structurally
+      // identical but nominally incompatible with the one from our own
+      // @solana/web3.js (TS compares private fields). Runtime behavior is
+      // unaffected -- both are the same JSON-RPC client shape.
+      const pool = await AmmImpl.create(connection as any, new PublicKey(poolId));
       // pool.tokenAMint/tokenBMint come straight off the raw on-chain pool
       // account -- poolInfo.tokenAAmount always tracks tokenA's reserve,
       // tokenBAmount always tracks tokenB's, regardless of which token that
@@ -685,7 +690,12 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
   async function addLiquidity(btknAmountStr: string) {
     if (!wallet || !wallet.signTransaction || !poolId || !pdas) return;
     await runAction("Add LP", async () => {
-      const pool = await AmmImpl.create(connection, new PublicKey(poolId));
+      // Cast needed: the Meteora SDK bundles its own separately-versioned
+      // copy of @solana/web3.js, so its `Connection` type is structurally
+      // identical but nominally incompatible with the one from our own
+      // @solana/web3.js (TS compares private fields). Runtime behavior is
+      // unaffected -- both are the same JSON-RPC client shape.
+      const pool = await AmmImpl.create(connection as any, new PublicKey(poolId));
 
       // Meteora's pool PDA canonically sorts tokenA/tokenB by pubkey bytes
       // at creation time -- bTKN isn't guaranteed to be tokenA. Check the
@@ -711,7 +721,10 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
         quote.minPoolTokenAmountOut
       );
 
-      const signed = await wallet.signTransaction(tx);
+      // Same cross-copy-of-web3.js cast as above -- `tx` here is built by the
+      // Meteora SDK's own web3.js Transaction class, structurally identical
+      // to but nominally distinct from wallet-adapter's expected type.
+      const signed = await wallet.signTransaction(tx as any);
       const txId = await connection.sendRawTransaction(signed.serialize());
 
       // Same confirmation-race + failure-check fix used everywhere else
@@ -734,7 +747,12 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
   async function removeLiquidity(lpAmountStr: string) {
     if (!wallet || !wallet.signTransaction || !poolId) return;
     await runAction("Remove LP", async () => {
-      const pool = await AmmImpl.create(connection, new PublicKey(poolId));
+      // Cast needed: the Meteora SDK bundles its own separately-versioned
+      // copy of @solana/web3.js, so its `Connection` type is structurally
+      // identical but nominally incompatible with the one from our own
+      // @solana/web3.js (TS compares private fields). Runtime behavior is
+      // unaffected -- both are the same JSON-RPC client shape.
+      const pool = await AmmImpl.create(connection as any, new PublicKey(poolId));
 
       const lpRaw = new BN(toRawLp(lpAmountStr).toString());
       const quote = pool.getWithdrawQuote(lpRaw, 1); // balanced withdraw (no tokenMint arg), 1% slippage
@@ -746,7 +764,10 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
         quote.minTokenBOutAmount
       );
 
-      const signed = await wallet.signTransaction(tx);
+      // Same cross-copy-of-web3.js cast as above -- `tx` here is built by the
+      // Meteora SDK's own web3.js Transaction class, structurally identical
+      // to but nominally distinct from wallet-adapter's expected type.
+      const signed = await wallet.signTransaction(tx as any);
       const txId = await connection.sendRawTransaction(signed.serialize());
 
       const latestBlockhash = await connection.getLatestBlockhash("confirmed");
@@ -776,7 +797,7 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
       const tokenBMint = NATIVE_MINT;
 
       const tx = await AmmImpl.createCustomizablePermissionlessConstantProductPool(
-        connection,
+        connection as any,
         wallet.publicKey,
         tokenAMint,
         tokenBMint,
@@ -797,7 +818,10 @@ export function useVaultData(tknMintStr: string | null, poolId: string | null = 
         }
       );
 
-      const signed = await wallet.signTransaction(tx);
+      // Same cross-copy-of-web3.js cast as above -- `tx` here is built by the
+      // Meteora SDK's own web3.js Transaction class, structurally identical
+      // to but nominally distinct from wallet-adapter's expected type.
+      const signed = await wallet.signTransaction(tx as any);
       const txId = await connection.sendRawTransaction(signed.serialize());
 
       const latestBlockhash = await connection.getLatestBlockhash("confirmed");
