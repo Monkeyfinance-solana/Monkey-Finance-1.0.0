@@ -7,6 +7,7 @@
 * [Liquidity & Arbitrage](liquidity.md)
 * [Staking & Rewards](staking.md)
 * [Project Revenue](revenue.md)
+* [Roadmap](roadmap.md)
 * [Safety & Admin Controls](safety.md)
 * [How-To Guides](how-to-guides.md)
 * [Contract Addresses](contract-addresses.md)
