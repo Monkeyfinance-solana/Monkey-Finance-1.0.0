@@ -1,6 +1,6 @@
-# Summary
+# Table of contents
 
-* [Overview](overview.md)
+* [Overview](README.md)
 * [MONKEY Tokenomics](tokenomics.md)
 * [Project Revenue](revenue.md)
 * [How Wrapping Works](how-wrapping-works.md)
