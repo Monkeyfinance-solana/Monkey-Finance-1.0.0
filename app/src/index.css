@@ -90,6 +90,7 @@ body {
   padding: 10px 12px;
   border-radius: var(--radius-sm);
   cursor: pointer; text-align: left; width: 100%;
+  text-decoration: none;
 }
 .nav-item:hover { background: var(--border-soft); color: var(--text); }
 .nav-item.active { background: var(--accent-soft); color: var(--accent); }

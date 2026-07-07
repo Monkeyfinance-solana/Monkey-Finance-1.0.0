@@ -1,6 +1,6 @@
 type View = "farm" | "vault" | "docs";
 
-export function Sidebar({ view, onNavigate }: { view: View; onNavigate: (v: "farm" | "docs") => void }) {
+export function Sidebar({ view, onNavigate }: { view: View; onNavigate: (v: "farm") => void }) {
   return (
     <div className="sidebar">
       <div className="sidebar-brand">
@@ -15,9 +15,14 @@ export function Sidebar({ view, onNavigate }: { view: View; onNavigate: (v: "far
         <button className={`nav-item ${view === "farm" ? "active" : ""}`} onClick={() => onNavigate("farm")}>
           <span className="nav-icon">🌾</span> Farm Volatility
         </button>
-        <button className={`nav-item ${view === "docs" ? "active" : ""}`} onClick={() => onNavigate("docs")}>
+        <a
+          className="nav-item"
+          href="https://monkey-finance.gitbook.io/monkey-finance-docs/"
+          target="_blank"
+          rel="noreferrer"
+        >
           <span className="nav-icon">📄</span> Documentation
-        </button>
+        </a>
       </nav>
 
       <div className="sidebar-extras">

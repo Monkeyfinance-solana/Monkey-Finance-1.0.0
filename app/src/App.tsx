@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { FarmList } from "./components/FarmList";
 import { VaultDetail } from "./components/VaultDetail";
-import { Documentation } from "./components/Documentation";
 import { VAULTS } from "./config";
 
+// "docs" is kept in the union only because Sidebar's shared View type still
+// references it -- the nav item itself now links straight out to the
+// GitBook site (see Sidebar.tsx) instead of routing here, so this view is
+// never actually set by anything anymore.
 type View = "farm" | "vault" | "docs";
 
 export default function App({ connectButton }: { connectButton: React.ReactNode }) {
@@ -27,7 +30,6 @@ export default function App({ connectButton }: { connectButton: React.ReactNode 
         <div className="content">
           {view === "farm" && <FarmList onOpenVault={openVault} />}
           {view === "vault" && activeVault && <VaultDetail vault={activeVault} onBack={() => setView("farm")} />}
-          {view === "docs" && <Documentation />}
         </div>
       </div>
     </div>
