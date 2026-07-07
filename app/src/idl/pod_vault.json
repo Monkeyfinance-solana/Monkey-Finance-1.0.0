@@ -1,0 +1,2770 @@
+{
+  "address": "2A2iyfJ7Fr1PzQiz8crgmGn5MdBcyXaGrffppSz4C5ZD",
+  "metadata": {
+    "name": "pod_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Peapod-style wrap/unwrap vault: swap TKN <-> bTKN 1:1 minus a protocol fee."
+  },
+  "instructions": [
+    {
+      "name": "accept_authority",
+      "docs": [
+        "Step 2 of 2: must be signed by the currently-pending authority.",
+        "Completes the transfer nominated by `propose_authority`."
+      ],
+      "discriminator": [
+        107,
+        86,
+        198,
+        91,
+        33,
+        12,
+        107,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "new_authority",
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancel_authority_transfer",
+      "docs": [
+        "Authority-only: cancels a pending authority transfer before it's",
+        "been accepted."
+      ],
+      "discriminator": [
+        94,
+        131,
+        125,
+        184,
+        183,
+        24,
+        125,
+        229
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_btkn_rewards",
+      "docs": [
+        "Claim accrued bTKN-staking rewards without unstaking."
+      ],
+      "discriminator": [
+        42,
+        115,
+        218,
+        254,
+        158,
+        81,
+        76,
+        180
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  116,
+                  107,
+                  110,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_rewards",
+      "docs": [
+        "Claim accrued rewards without unstaking."
+      ],
+      "discriminator": [
+        4,
+        144,
+        132,
+        71,
+        116,
+        23,
+        151,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_vault",
+      "docs": [
+        "Creates a new vault (\"pod\") for a given TKN mint, and creates the",
+        "bTKN mint that this vault will control. Call this once per TKN.",
+        "",
+        "`btkn_name`/`btkn_symbol`/`btkn_uri` become bTKN's own Metaplex",
+        "metadata, created atomically in this same instruction (see",
+        "`instructions::initialize`). To have bTKN display the same image as",
+        "TKN, the caller should fetch TKN's existing metadata off-chain and",
+        "pass its `uri` straight through (see `scripts/init_vault.ts`)."
+      ],
+      "discriminator": [
+        48,
+        191,
+        163,
+        44,
+        71,
+        129,
+        63,
+        164
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "tkn_mint",
+          "docs": [
+            "The underlying token (TKN) this pod wraps. This should already exist",
+            "(e.g. the mint you got back from launching TKN on pump.fun)."
+          ]
+        },
+        {
+          "name": "protocol_token_account",
+          "docs": [
+            "Destination for the protocol-revenue share of fees (see",
+            "`protocol_bps`) -- must already exist and hold TKN (e.g. an ATA of",
+            "the vault deployer's own wallet). Required even if protocol_bps is",
+            "0 at first, so `set_protocol_wallet`/`update_fees` never have to deal",
+            "with an unset destination. Changeable later via `set_protocol_wallet`."
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tkn_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "btkn_mint",
+          "docs": [
+            "The wrapped token (bTKN), minted 1:1 against deposits. The vault PDA",
+            "itself is the mint authority, so only this program can ever mint it."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  116,
+                  107,
+                  110,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tkn_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_token_account",
+          "docs": [
+            "Vault's holding account for deposited TKN, owned by the vault PDA.",
+            "This backs bTKN 1:1 -- fees never touch it."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  116,
+                  107,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tkn_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "reward_vault_token_account",
+          "docs": [
+            "Holds the LP-reward share of collected fees until stakers claim it.",
+            "(A plain PDA-owned token account, not an ATA -- an ATA would collide",
+            "with vault_token_account since both hold the same mint under the",
+            "same owner.)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tkn_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "staked_btkn_vault",
+          "docs": [
+            "Holds staked bTKN in custody for the bTKN-staking pool. Created here",
+            "(unlike staked_lp_vault, which waits for `set_lp_mint`) since bTKN's",
+            "mint is already known -- bTKN staking works from the moment the vault",
+            "exists, no external pool required."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  100,
+                  95,
+                  98,
+                  116,
+                  107,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tkn_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "btkn_metadata",
+          "docs": [
+            "Unallocated Metaplex Metadata PDA for bTKN -- created via CPI inside",
+            "the handler so bTKN can carry the same name/symbol/image as TKN from",
+            "the moment it's minted. Anchor only validates the address here (via",
+            "`seeds`/`seeds::program`); the account is actually created by the",
+            "`CreateV1` CPI below, not by an `init` constraint, since Anchor",
+            "doesn't know how to initialize another program's account type.",
+            "against the real Metaplex Token Metadata program; contents are",
+            "written by that program via the CPI in the handler, not by us."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "btkn_mint"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "token_metadata_program",
+          "docs": [
+            "program id (`metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s`); this is",
+            "the program being CPI'd into, not our data. Hardcoded via `Pubkey`'s",
+            "`FromStr` (base58) parsing rather than `mpl_token_metadata::ID`",
+            "directly, since that constant is a `Pubkey` from a different",
+            "(incompatible, separately-versioned) copy of the solana-pubkey crate",
+            "than the one anchor-lang uses here -- comparing the two directly is a",
+            "type error, not just a style choice. Also avoids the `pubkey!` macro,",
+            "whose path isn't resolvable in this crate-version combination."
+          ]
+        },
+        {
+          "name": "sysvar_instructions",
+          "docs": [
+            "address (`Sysvar1nstructions1111111111111111111111111`), required by",
+            "Metaplex's `CreateV1` instruction (used for instruction introspection",
+            "on their end), not read by us. Hardcoded via `Pubkey`'s `FromStr`",
+            "parsing (see `token_metadata_program` above for why)."
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "wrap_fee_bps",
+          "type": "u16"
+        },
+        {
+          "name": "unwrap_fee_bps",
+          "type": "u16"
+        },
+        {
+          "name": "burn_bps",
+          "type": "u16"
+        },
+        {
+          "name": "protocol_bps",
+          "type": "u16"
+        },
+        {
+          "name": "btkn_share_bps",
+          "type": "u16"
+        },
+        {
+          "name": "btkn_name",
+          "type": "string"
+        },
+        {
+          "name": "btkn_symbol",
+          "type": "string"
+        },
+        {
+          "name": "btkn_uri",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "propose_authority",
+      "docs": [
+        "Authority-only, step 1 of 2: nominate a new authority. Takes no",
+        "effect until the nominated address signs `accept_authority`."
+      ],
+      "discriminator": [
+        20,
+        148,
+        236,
+        198,
+        76,
+        119,
+        99,
+        142
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_authority"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "reset_lp_mint",
+      "docs": [
+        "Authority-only, only while total_staked == 0: closes the current",
+        "staked-LP vault and clears lp_mint, so `set_lp_mint` can be called",
+        "again with a corrected address. Lets you recover from pointing the",
+        "vault at the wrong LP mint, as long as nobody's staked yet."
+      ],
+      "discriminator": [
+        233,
+        105,
+        195,
+        139,
+        20,
+        143,
+        241,
+        75
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "staked_lp_vault",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "set_lp_mint",
+      "docs": [
+        "Authority-only, once per vault: point it at the bTKN/SOL (or",
+        "whatever pair) pool's LP mint so LPs can stake it for rewards."
+      ],
+      "discriminator": [
+        189,
+        11,
+        158,
+        122,
+        176,
+        207,
+        231,
+        132
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lp_mint"
+        },
+        {
+          "name": "staked_lp_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  100,
+                  95,
+                  108,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "set_paused",
+      "docs": [
+        "Authority-only emergency switch: while paused, `wrap` and `unwrap`",
+        "are blocked (staking/unstaking/claiming are NOT affected, since",
+        "letting people withdraw their own funds is safe even mid-incident).",
+        "This buys time to investigate a bug without needing to redeploy."
+      ],
+      "discriminator": [
+        91,
+        60,
+        125,
+        192,
+        176,
+        225,
+        166,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "paused",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_protocol_wallet",
+      "docs": [
+        "Authority-only: repoint the protocol-revenue destination account."
+      ],
+      "discriminator": [
+        118,
+        54,
+        197,
+        41,
+        122,
+        139,
+        65,
+        174
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "protocol_token_account"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "stake_btkn",
+      "docs": [
+        "Stake bTKN directly to earn a share of fees -- the option for",
+        "holders who don't want to provide/stake LP. Works immediately, with",
+        "no dependency on an external pool existing."
+      ],
+      "discriminator": [
+        153,
+        39,
+        88,
+        228,
+        17,
+        34,
+        169,
+        216
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "btkn_mint",
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "staked_btkn_vault",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_btkn_account",
+          "writable": true
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  116,
+                  107,
+                  110,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "stake_lp",
+      "docs": [
+        "Stake your bTKN/SOL LP token to start earning a share of fees."
+      ],
+      "discriminator": [
+        48,
+        168,
+        125,
+        78,
+        82,
+        71,
+        152,
+        117
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lp_mint",
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "staked_lp_vault",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_lp_token_account",
+          "writable": true
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "unstake_btkn",
+      "docs": [
+        "Unstake bTKN, automatically claiming any pending reward first."
+      ],
+      "discriminator": [
+        179,
+        159,
+        108,
+        172,
+        42,
+        59,
+        119,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "btkn_mint",
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "staked_btkn_vault",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_btkn_account",
+          "writable": true
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  116,
+                  107,
+                  110,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "unstake_lp",
+      "docs": [
+        "Unstake LP tokens, automatically claiming any pending reward first."
+      ],
+      "discriminator": [
+        114,
+        4,
+        7,
+        206,
+        251,
+        176,
+        233,
+        119
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lp_mint",
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "staked_lp_vault",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_lp_token_account",
+          "writable": true
+        },
+        {
+          "name": "user_reward_token_account",
+          "writable": true
+        },
+        {
+          "name": "stake_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "unwrap",
+      "docs": [
+        "Burn `amount` bTKN, receive (amount - fee) TKN back. Same fee split",
+        "as wrap, using unwrap_fee_bps instead."
+      ],
+      "discriminator": [
+        126,
+        175,
+        198,
+        14,
+        212,
+        69,
+        50,
+        44
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tkn_mint",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "btkn_mint",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "protocol_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_tkn_account",
+          "writable": true
+        },
+        {
+          "name": "user_btkn_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_fees",
+      "docs": [
+        "Authority-only: change the wrap fee, unwrap fee, and how each fee is",
+        "split between burn / protocol revenue / bTKN stakers / LP stakers."
+      ],
+      "discriminator": [
+        225,
+        27,
+        13,
+        6,
+        69,
+        84,
+        172,
+        191
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "wrap_fee_bps",
+          "type": "u16"
+        },
+        {
+          "name": "unwrap_fee_bps",
+          "type": "u16"
+        },
+        {
+          "name": "burn_bps",
+          "type": "u16"
+        },
+        {
+          "name": "protocol_bps",
+          "type": "u16"
+        },
+        {
+          "name": "btkn_share_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "wrap",
+      "docs": [
+        "Deposit `amount` TKN, receive (amount - fee) bTKN. A share of the",
+        "fee (`burn_bps`) is burned; the rest funds staker rewards, split",
+        "between LP stakers and bTKN stakers per `btkn_share_bps`."
+      ],
+      "discriminator": [
+        178,
+        40,
+        10,
+        189,
+        228,
+        129,
+        186,
+        140
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_config.tkn_mint",
+                "account": "VaultConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tkn_mint",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "btkn_mint",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "reward_vault_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "protocol_token_account",
+          "writable": true,
+          "relations": [
+            "vault_config"
+          ]
+        },
+        {
+          "name": "user_tkn_account",
+          "writable": true
+        },
+        {
+          "name": "user_btkn_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "btkn_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "StakeInfo",
+      "discriminator": [
+        66,
+        62,
+        68,
+        70,
+        108,
+        179,
+        183,
+        235
+      ]
+    },
+    {
+      "name": "VaultConfig",
+      "discriminator": [
+        99,
+        86,
+        43,
+        216,
+        184,
+        102,
+        119,
+        77
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AuthorityProposedEvent",
+      "discriminator": [
+        221,
+        27,
+        73,
+        198,
+        252,
+        169,
+        231,
+        224
+      ]
+    },
+    {
+      "name": "AuthorityTransferCancelledEvent",
+      "discriminator": [
+        192,
+        121,
+        140,
+        224,
+        229,
+        96,
+        13,
+        143
+      ]
+    },
+    {
+      "name": "AuthorityUpdatedEvent",
+      "discriminator": [
+        44,
+        40,
+        20,
+        115,
+        145,
+        198,
+        95,
+        200
+      ]
+    },
+    {
+      "name": "BtknRewardPaidEvent",
+      "discriminator": [
+        178,
+        241,
+        102,
+        100,
+        246,
+        229,
+        229,
+        169
+      ]
+    },
+    {
+      "name": "BtknStakeEvent",
+      "discriminator": [
+        15,
+        4,
+        113,
+        24,
+        236,
+        32,
+        230,
+        210
+      ]
+    },
+    {
+      "name": "BtknUnstakeEvent",
+      "discriminator": [
+        19,
+        93,
+        106,
+        111,
+        5,
+        167,
+        230,
+        76
+      ]
+    },
+    {
+      "name": "FeesUpdatedEvent",
+      "discriminator": [
+        132,
+        181,
+        254,
+        193,
+        136,
+        177,
+        41,
+        20
+      ]
+    },
+    {
+      "name": "LpMintResetEvent",
+      "discriminator": [
+        47,
+        19,
+        79,
+        177,
+        1,
+        253,
+        131,
+        136
+      ]
+    },
+    {
+      "name": "LpMintSetEvent",
+      "discriminator": [
+        86,
+        118,
+        127,
+        191,
+        2,
+        7,
+        31,
+        204
+      ]
+    },
+    {
+      "name": "PausedSetEvent",
+      "discriminator": [
+        210,
+        246,
+        187,
+        173,
+        5,
+        193,
+        142,
+        20
+      ]
+    },
+    {
+      "name": "ProtocolWalletSetEvent",
+      "discriminator": [
+        253,
+        117,
+        163,
+        161,
+        191,
+        167,
+        148,
+        192
+      ]
+    },
+    {
+      "name": "RewardPaidEvent",
+      "discriminator": [
+        209,
+        35,
+        148,
+        7,
+        238,
+        232,
+        124,
+        53
+      ]
+    },
+    {
+      "name": "StakeEvent",
+      "discriminator": [
+        226,
+        134,
+        188,
+        173,
+        19,
+        33,
+        75,
+        175
+      ]
+    },
+    {
+      "name": "UnstakeEvent",
+      "discriminator": [
+        162,
+        104,
+        137,
+        228,
+        81,
+        3,
+        79,
+        197
+      ]
+    },
+    {
+      "name": "UnwrapEvent",
+      "discriminator": [
+        73,
+        129,
+        203,
+        215,
+        50,
+        111,
+        179,
+        20
+      ]
+    },
+    {
+      "name": "WrapEvent",
+      "discriminator": [
+        148,
+        134,
+        198,
+        142,
+        20,
+        51,
+        173,
+        180
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "FeeTooHigh",
+      "msg": "Fee exceeds maximum allowed (3%)"
+    },
+    {
+      "code": 6001,
+      "name": "ZeroAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6002,
+      "name": "AmountBelowFee",
+      "msg": "Amount too small: fee consumes entire output"
+    },
+    {
+      "code": 6003,
+      "name": "Unauthorized",
+      "msg": "Only the vault authority can perform this action"
+    },
+    {
+      "code": 6004,
+      "name": "MathOverflow",
+      "msg": "Math overflow"
+    },
+    {
+      "code": 6005,
+      "name": "LpMintAlreadySet",
+      "msg": "LP mint has already been set for this vault"
+    },
+    {
+      "code": 6006,
+      "name": "InsufficientStake",
+      "msg": "Not enough staked to unstake that amount"
+    },
+    {
+      "code": 6007,
+      "name": "VaultPaused",
+      "msg": "wrap/unwrap are paused on this vault"
+    },
+    {
+      "code": 6008,
+      "name": "CannotResetWhileStaked",
+      "msg": "Cannot reset the LP mint while stakers are still staked"
+    },
+    {
+      "code": 6009,
+      "name": "LpMintNotSet",
+      "msg": "No LP mint has been set for this vault yet"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidNewAuthority",
+      "msg": "New authority cannot be the default/zero pubkey"
+    },
+    {
+      "code": 6011,
+      "name": "NoPendingAuthorityTransfer",
+      "msg": "No authority transfer is currently pending for this vault"
+    },
+    {
+      "code": 6012,
+      "name": "NotThePendingAuthority",
+      "msg": "Only the pending authority can accept this transfer"
+    },
+    {
+      "code": 6013,
+      "name": "FeeSplitExceedsTotal",
+      "msg": "burn_bps + protocol_bps + btkn_share_bps cannot exceed 10_000 (100% of the fee)"
+    },
+    {
+      "code": 6014,
+      "name": "ProtocolWalletNotSet",
+      "msg": "protocol_bps is nonzero but no protocol wallet has been set -- call set_protocol_wallet first"
+    },
+    {
+      "code": 6015,
+      "name": "MetadataFieldTooLong",
+      "msg": "bTKN name/symbol/uri exceeds Metaplex's max length for that field"
+    }
+  ],
+  "types": [
+    {
+      "name": "AuthorityProposedEvent",
+      "docs": [
+        "Emitted when the authority proposes a transfer via `propose_authority`.",
+        "The transfer isn't in effect yet -- `authority` on VaultConfig is",
+        "unchanged until the proposed address calls `accept_authority`."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "current_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "proposed_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AuthorityTransferCancelledEvent",
+      "docs": [
+        "Emitted when a pending authority transfer is cancelled via",
+        "`cancel_authority_transfer`, before it was ever accepted."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "cancelled_pending_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AuthorityUpdatedEvent",
+      "docs": [
+        "Emitted once the proposed authority actually accepts, via",
+        "`accept_authority` -- this is the point the transfer takes effect."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BtknRewardPaidEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BtknStakeEvent",
+      "docs": [
+        "Same shape as StakeEvent/UnstakeEvent/RewardPaidEvent, emitted for the",
+        "bTKN-staker pool instead of the LP-staker pool."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_btkn_staked",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BtknUnstakeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_btkn_staked",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FeesUpdatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "wrap_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "unwrap_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "burn_bps",
+            "type": "u16"
+          },
+          {
+            "name": "protocol_bps",
+            "type": "u16"
+          },
+          {
+            "name": "btkn_share_bps",
+            "type": "u16"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LpMintResetEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LpMintSetEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "lp_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PausedSetEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProtocolWalletSetEvent",
+      "docs": [
+        "Emitted whenever the protocol-revenue destination account is set/changed",
+        "via `set_protocol_wallet`."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "protocol_token_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RewardPaidEvent",
+      "docs": [
+        "Emitted any time a pending reward is actually paid out -- whether that",
+        "happened via an explicit `claim_rewards` call, or as the automatic",
+        "settle-before-you-change-your-stake step inside `stake_lp`/`unstake_lp`."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeInfo",
+      "docs": [
+        "Shared shape for both staking pools: LP stakers (PDA seeds `[\"stake\", ...]`)",
+        "and bTKN stakers (PDA seeds `[\"btkn_stake\", ...]`) each get their own",
+        "StakeInfo account, keyed by their own seed prefix, pointed at their own",
+        "accumulator on VaultConfig."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "reward_debt",
+            "type": "u128"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "total_claimed",
+            "docs": [
+              "Cumulative TKN this staker has ever been paid, across every",
+              "stake/unstake/claim that triggered a payout. Read this directly to",
+              "answer \"how much have I gained so far\" without needing to replay",
+              "event history."
+            ],
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnstakeEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnwrapEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "btkn_burned",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "burned",
+            "type": "u64"
+          },
+          {
+            "name": "to_protocol",
+            "type": "u64"
+          },
+          {
+            "name": "to_reward_pot",
+            "type": "u64"
+          },
+          {
+            "name": "to_btkn_reward_pot",
+            "type": "u64"
+          },
+          {
+            "name": "tkn_released",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VaultConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "pending_authority",
+            "docs": [
+              "Set by `propose_authority`, cleared by `accept_authority` or",
+              "`cancel_authority_transfer`. Pubkey::default() means \"no transfer",
+              "pending\". Two-step so a mistyped/unreachable address can never",
+              "permanently strip control of the vault -- the new authority must",
+              "actively sign `accept_authority` before the change takes effect."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "tkn_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "btkn_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_token_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "reward_vault_token_account",
+            "docs": [
+              "Holds the LP-reward share of collected fees until stakers claim it."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "lp_mint",
+            "docs": [
+              "The bTKN/SOL (or whatever pair) LP token from an external AMM.",
+              "Pubkey::default() until `set_lp_mint` is called, since the pool",
+              "is usually created after the vault itself."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_lp_vault",
+            "docs": [
+              "Holds staked LP tokens in custody. Pubkey::default() until",
+              "`set_lp_mint` is called."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_btkn_vault",
+            "docs": [
+              "Holds staked bTKN tokens in custody. Created at `initialize_vault`",
+              "time (unlike staked_lp_vault) since the bTKN mint is already known",
+              "up front -- bTKN staking has no external-pool dependency, so it can",
+              "be used the moment someone wraps, with no bootstrap step."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "protocol_token_account",
+            "docs": [
+              "Destination for the protocol-revenue share of each fee (see",
+              "`protocol_bps`). A plain TokenAccount (TKN mint) that the team",
+              "controls -- e.g. an ATA of the vault deployer's own wallet. Set at",
+              "`initialize_vault` time and changeable later via `set_protocol_wallet`."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "wrap_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "unwrap_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "burn_bps",
+            "docs": [
+              "Every one of burn_bps/protocol_bps/btkn_share_bps below is a direct",
+              "% *of the fee itself* (not nested/sequential -- e.g. burn_bps = 2000",
+              "means 20% of the fee is burned, independent of the other splits).",
+              "Their sum must be <= 10_000; whatever's left over implicitly goes to",
+              "the LP-staker reward pot, so the four buckets (burn, protocol, bTKN",
+              "stakers, LP stakers) always account for exactly 100% of the fee.",
+              "",
+              "% of each collected fee that gets burned."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "protocol_bps",
+            "docs": [
+              "% of each collected fee routed to `protocol_token_account`. Requires",
+              "`protocol_token_account` to already be set -- see `set_protocol_wallet`."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "btkn_share_bps",
+            "docs": [
+              "% of each collected fee that goes to the bTKN-staker reward pot",
+              "(rather than the LP-staker reward pot). Orthogonal to burn_bps/",
+              "protocol_bps."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "acc_reward_per_share",
+            "docs": [
+              "Accumulator (scaled by SCALE) used for O(1) reward accounting,",
+              "MasterChef-style: each staker's pending reward is",
+              "`amount * acc_reward_per_share / SCALE - reward_debt`."
+            ],
+            "type": "u128"
+          },
+          {
+            "name": "acc_btkn_reward_per_share",
+            "docs": [
+              "Same idea as acc_reward_per_share, but for the bTKN-staker pool."
+            ],
+            "type": "u128"
+          },
+          {
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "name": "total_btkn_staked",
+            "docs": [
+              "Total bTKN currently staked (locked in staked_btkn_vault)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_wrapped",
+            "type": "u64"
+          },
+          {
+            "name": "total_unwrapped",
+            "type": "u64"
+          },
+          {
+            "name": "total_burned",
+            "docs": [
+              "Cumulative TKN burned by this vault since inception. Read this",
+              "directly (no indexer needed) for a \"total burned\" stat."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_reward_distributed",
+            "docs": [
+              "Cumulative TKN ever routed into the LP-staker reward pot (whether",
+              "claimed yet or not)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_btkn_reward_distributed",
+            "docs": [
+              "Same, for the bTKN-staker reward pot."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_protocol_distributed",
+            "docs": [
+              "Cumulative TKN ever sent to `protocol_token_account`."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "btkn_mint_bump",
+            "type": "u8"
+          },
+          {
+            "name": "paused",
+            "docs": [
+              "Emergency switch. While true, `wrap`/`unwrap` are blocked. Does NOT",
+              "affect staking/unstaking/claiming -- letting people withdraw their",
+              "own funds is safe even mid-incident."
+            ],
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WrapEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vault_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount_in",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "burned",
+            "type": "u64"
+          },
+          {
+            "name": "to_protocol",
+            "type": "u64"
+          },
+          {
+            "name": "to_reward_pot",
+            "type": "u64"
+          },
+          {
+            "name": "to_btkn_reward_pot",
+            "type": "u64"
+          },
+          {
+            "name": "btkn_minted",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}

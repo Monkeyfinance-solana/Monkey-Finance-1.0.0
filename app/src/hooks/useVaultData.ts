@@ -21,10 +21,11 @@ import {
 import AmmImpl, { PROGRAM_ID as METEORA_AMM_PROGRAM_ID } from "@meteora-ag/dynamic-amm-sdk";
 import BN from "bn.js";
 
-// These come straight from your last `anchor build` -- no copying needed,
-// always in sync with whatever's currently deployed.
-import idl from "../../../target/idl/pod_vault.json";
-import type { PodVault } from "../../../target/types/pod_vault";
+// Checked-in copies of Anchor's generated IDL/types (see app/src/idl/pod_vault.ts
+// for why -- target/ is gitignored, so the originals never reach Vercel's build).
+// Re-copy both files here after every `anchor build` that changes the program.
+import idl from "../idl/pod_vault.json";
+import type { PodVault } from "../idl/pod_vault";
 
 const SCALE = new anchor.BN("1000000000000");
 const POLL_MS = 5 * 60 * 1000; // dashboard refresh: every 5 minutes, shared for everyone
